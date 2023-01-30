@@ -2,24 +2,18 @@
 name = "sparv-kb-ner-plugin"
 version = "0.1.0"
 description = ""
-authors = ["Kristoffer Andersson <kristoffer.andersson@gu.se>"]
+authors = ['Kristoffer Andersson <kristoffer.andersson@gu.se>']
+license = "MIT"
 readme = "README.md"
-packages = [
-    {include = "development"},
-    {include = "sparv_kb_ner"},
-]
+
+packages = []
 
 [tool.poetry.dependencies]
 python = "^3.10"
 sparv-pipeline = {git = "https://github.com/spraakbanken/sparv-pipeline.git", rev = "support-py310"}
-transformers = "^4.26.0"
-tabulate = "^0.9.0"
-
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2.1"
-black = "^22.12.0"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
