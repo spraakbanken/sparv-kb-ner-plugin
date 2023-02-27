@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Union
 
 from sparv.api import annotator, get_logger, Output, Annotation
 
@@ -107,18 +106,7 @@ def interleave_tags_and_sentence(tokens: list[Token], sentence: str) -> list[str
                 logger.debug("parts=%s", parts)
                 # print(f"{parts=}")
                 for word in parts:
-                    print(f"word = {word}")
+                    logger.debug("word = %s", word)
                     tags.append("")
             curr = part_end
     return tags
-
-
-def run_nlp(stdin: str) -> str:
-    tokens = []
-    for sentence in stdin.split(SENT_SEP):
-        for token in nlp(sentence):
-            if token["word"].startswith("##"):
-                tokens[-1]["word"] += token["word"][2:]
-            else:
-                tokens.append(token)
-    return SENT_SEP.join((token["entity"] for token in tokens))
