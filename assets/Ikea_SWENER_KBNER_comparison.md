@@ -7,25 +7,27 @@ Runtime for KBNER: 21 s
 Runtime for SWENER: 54 s
 
 ```diff
+
+
 7,9c7
-<     <ne>
+<     <ne ex="ENAMEX" subtype="CRP" type="ORG">
 <       <token word="Ikea" pos="PM">Ikea</token>
 <     </ne>
 ---
 >     <token word="Ikea" kb-ne="ORG" pos="PM">Ikea</token>
 12,14c10
-<     <ne>
+<     <ne ex="ENAMEX" subtype="CRP" type="ORG">
 <       <token word="Ikea" pos="PM">Ikea</token>
 <     </ne>
 ---
 >     <token word="Ikea" kb-ne="ORG" pos="PM">Ikea</token>
 22,30c18,22
-<     <ne>
+<     <ne ex="ENAMEX" subtype="HUM" type="PRS">
 <       <token word="Ingvar" pos="PM">Ingvar</token>
 <       <token word="Kamprad" pos="PM">Kamprad</token>
 <       <token word="Elmtaryd" pos="PM">Elmtaryd</token>
 <     </ne>
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Agunnaryd" pos="PM">Agunnaryd</token>
 <     </ne>
 <     <token word=")" pos="PAD">)</token>
@@ -36,11 +38,11 @@ Runtime for SWENER: 54 s
 >     <token word="Agunnaryd" pos="PM">Agunnaryd</token>
 >     <token word=")" kb-ne="LOC" pos="PAD">)</token>
 37,45c29,33
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="1943" pos="RG">1943</token>
 <     </ne>
 <     <token word="av" pos="PP">av</token>
-<     <ne>
+<     <ne ex="ENAMEX" subtype="HUM" type="PRS">
 <       <token word="Ingvar" pos="PM">Ingvar</token>
 <       <token word="Kamprad" pos="PM">Kamprad</token>
 <     </ne>
@@ -52,17 +54,17 @@ Runtime for SWENER: 54 s
 >     <token word="Kamprad" kb-ne="PER" pos="PM">Kamprad</token>
 >     <token word="." kb-ne="PER" pos="MAD">.</token>
 54,56c42
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Nederländerna" pos="PM">Nederländerna</token>
 <     </ne>
 ---
 >     <token word="Nederländerna" kb-ne="LOC" pos="PM">Nederländerna</token>
 64,70c50,52
-<     <ne>
+<     <ne ex="ENAMEX" subtype="CRP" type="ORG">
 <       <token word="Interogo" pos="PM">Interogo</token>
 <     </ne>
 <     <token word="i" pos="PP">i</token>
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Luxemburg" pos="PM">Luxemburg</token>
 <     </ne>
 ---
@@ -70,13 +72,13 @@ Runtime for SWENER: 54 s
 >     <token word="i" pos="PP">i</token>
 >     <token word="Luxemburg" kb-ne="LOC" pos="PM">Luxemburg</token>
 77,79c59
-<     <ne>
+<     <ne ex="ENAMEX" subtype="HUM" type="PRS">
 <       <token word="Kamprad" pos="PM">Kamprad</token>
 <     </ne>
 ---
 >     <token word="Kamprad" kb-ne="PER" pos="PM">Kamprad</token>
 84,87c64,65
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="verksamhetsåret" pos="NN">verksamhetsåret</token>
 <       <token word="2012" pos="RG">2012</token>
 <     </ne>
@@ -85,7 +87,7 @@ Runtime for SWENER: 54 s
 >     <token word="2012" kb-ne="TME" pos="RG">2012</token>
 89,95c67,71
 <     <token word="Ikeakoncernen" pos="NN">Ikeakoncernen</token>
-<     <ne>
+<     <ne ex="NUMEX" subtype="CUR" type="MSR">
 <       <token word="241" pos="RG">241</token>
 <       <token word="miljarder" pos="NN">miljarder</token>
 <       <token word="kronor" pos="NN">kronor</token>
@@ -98,34 +100,34 @@ Runtime for SWENER: 54 s
 >     <token word="kronor" kb-ne="MSR" pos="NN">kronor</token>
 >     <token word="." kb-ne="MSR" pos="MAD">.</token>
 113,115c89
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Sverige" pos="PM">Sverige</token>
 <     </ne>
 ---
 >     <token word="Sverige" kb-ne="LOC" pos="PM">Sverige</token>
 118,120c92
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Helsingborg" pos="PM">Helsingborg</token>
 <     </ne>
 ---
 >     <token word="Helsingborg" kb-ne="LOC" pos="PM">Helsingborg</token>
 125,127c97
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Helsingborg" pos="PM">Helsingborg</token>
 <     </ne>
 ---
 >     <token word="Helsingborg" kb-ne="LOC" pos="PM">Helsingborg</token>
 129,131c99
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="idag" pos="AB">idag</token>
 <     </ne>
 ---
 >     <token word="idag" kb-ne="TME" pos="AB">idag</token>
 159,166c127,130
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Malmö" pos="PM">Malmö</token>
 <     </ne>
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="1" pos="RO">1</token>
 <       <token word="september" pos="NN">september</token>
 <       <token word="2015" pos="RG">2015</token>
@@ -142,13 +144,13 @@ Runtime for SWENER: 54 s
 >     <token word="Vintrie" kb-ne="LOC" pos="PM">Vintrie</token>
 >     <token word="park" kb-ne="LOC" pos="NN">park</token>
 185,187c149
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Svågertorp" pos="PM">Svågertorp</token>
 <     </ne>
 ---
 >     <token word="Svågertorp" kb-ne="LOC" pos="PM">Svågertorp</token>
 216,218c178
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Mellanöstern" pos="PM">Mellanöstern</token>
 <     </ne>
 ---
@@ -160,34 +162,34 @@ Runtime for SWENER: 54 s
 >     <token word="spanska" kb-ne="LOC" pos="JJ">spanska</token>
 >     <token word="öarna" kb-ne="LOC" pos="NN">öarna</token>
 237,267c197,211
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Tyskland" pos="PM">Tyskland</token>
 <     </ne>
-<     <ne>
+<     <ne ex="NUMEX" subtype="PRC" type="MSR">
 <       <token word="16" pos="RG">16</token>
 <       <token word="%" pos="NN">%</token>
 <     </ne>
 <     <token word="," pos="MID">,</token>
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="USA" pos="PM">USA</token>
 <     </ne>
-<     <ne>
+<     <ne ex="NUMEX" subtype="PRC" type="MSR">
 <       <token word="11" pos="RG">11</token>
 <       <token word="%" pos="NN">%</token>
 <     </ne>
 <     <token word="," pos="MID">,</token>
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Frankrike" pos="PM">Frankrike</token>
 <     </ne>
-<     <ne>
+<     <ne ex="NUMEX" subtype="PRC" type="MSR">
 <       <token word="10" pos="RG">10</token>
 <       <token word="%" pos="NN">%</token>
 <     </ne>
 <     <token word="," pos="MID">,</token>
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Storbritannien" pos="PM">Storbritannien</token>
 <     </ne>
-<     <ne>
+<     <ne ex="NUMEX" subtype="PRC" type="MSR">
 <       <token word="7" pos="RG">7</token>
 <       <token word="%" pos="NN">%</token>
 <     </ne>
@@ -208,10 +210,10 @@ Runtime for SWENER: 54 s
 >     <token word="7" kb-ne="MSR" pos="RG">7</token>
 >     <token word="%" kb-ne="MSR" pos="NN">%</token>
 269,275c213,215
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Italien" pos="PM">Italien</token>
 <     </ne>
-<     <ne>
+<     <ne ex="NUMEX" subtype="PRC" type="MSR">
 <       <token word="7" pos="RG">7</token>
 <       <token word="%" pos="NN">%</token>
 <     </ne>
@@ -220,16 +222,16 @@ Runtime for SWENER: 54 s
 >     <token word="7" kb-ne="MSR" pos="RG">7</token>
 >     <token word="%" kb-ne="MSR" pos="NN">%</token>
 280,282c220
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Sverige" pos="PM">Sverige</token>
 <     </ne>
 ---
 >     <token word="Sverige" kb-ne="LOC" pos="PM">Sverige</token>
 294,301c232,235
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Borlänge" pos="PM">Borlänge</token>
 <     </ne>
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="25" pos="RG">25</token>
 <       <token word="oktober" pos="NN">oktober</token>
 <       <token word="2013" pos="RG">2013</token>
@@ -240,16 +242,16 @@ Runtime for SWENER: 54 s
 >     <token word="oktober" kb-ne="TME" pos="NN">oktober</token>
 >     <token word="2013" kb-ne="TME" pos="RG">2013</token>
 308,310c242
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="dessförinnan" pos="AB">dessförinnan</token>
 <     </ne>
 ---
 >     <token word="dessförinnan" kb-ne="TME" pos="AB">dessförinnan</token>
 314,322c246,250
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Uddevalla" pos="PM">Uddevalla</token>
 <     </ne>
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="den" pos="DT">den</token>
 <       <token word="8" pos="RO">8</token>
 <       <token word="maj" pos="NN">maj</token>
@@ -262,7 +264,7 @@ Runtime for SWENER: 54 s
 >     <token word="maj" kb-ne="TME" pos="NN">maj</token>
 >     <token word="2013" kb-ne="TME" pos="RG">2013</token>
 325,330c253,256
-<     <ne>
+<     <ne ex="NUMEX" subtype="MSU" type="MSR">
 <       <token word="på" pos="PP">på</token>
 <       <token word="37" pos="RG">37</token>
 <       <token word="400" pos="RG">400</token>
@@ -274,17 +276,17 @@ Runtime for SWENER: 54 s
 >     <token word="400" kb-ne="MSR" pos="RG">400</token>
 >     <token word="kvadratmeter" kb-ne="MSR" pos="NN">kvadratmeter</token>
 336,338c262
-<     <ne>
+<     <ne ex="ENAMEX" subtype="GPL" type="LOC">
 <       <token word="Ikea" pos="PM">Ikea</token>
 <     </ne>
 ---
 >     <token word="Ikea" kb-ne="ORG" pos="PM">Ikea</token>
 341,347c265,267
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Haparanda" pos="PM">Haparanda</token>
 <     </ne>
 <     <token word="i" pos="PP">i</token>
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Sverige" pos="PM">Sverige</token>
 <     </ne>
 ---
@@ -292,7 +294,7 @@ Runtime for SWENER: 54 s
 >     <token word="i" pos="PP">i</token>
 >     <token word="Sverige" kb-ne="LOC" pos="PM">Sverige</token>
 352,354c272
-<     <ne>
+<     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Finland" pos="PM">Finland</token>
 <     </ne>
 ---
@@ -302,19 +304,19 @@ Runtime for SWENER: 54 s
 ---
 >     <token word="HaparandaTornio" kb-ne="LOC" pos="PM">HaparandaTornio</token>
 361,363c279
-<     <ne>
+<     <ne ex="ENAMEX" subtype="CRP" type="ORG">
 <       <token word="Ikea" pos="PM">Ikea</token>
 <     </ne>
 ---
 >     <token word="Ikea" kb-ne="ORG" pos="PM">Ikea</token>
 366,368c282
-<     <ne>
+<     <ne ex="ENAMEX" subtype="GPL" type="LOC">
 <       <token word="Moskva" pos="PM">Moskva</token>
 <     </ne>
 ---
 >     <token word="Moskva" kb-ne="LOC" pos="PM">Moskva</token>
 370,373c284,285
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="år" pos="NN">år</token>
 <       <token word="2005" pos="RG">2005</token>
 <     </ne>
@@ -322,19 +324,19 @@ Runtime for SWENER: 54 s
 >     <token word="år" kb-ne="TME" pos="NN">år</token>
 >     <token word="2005" kb-ne="TME" pos="RG">2005</token>
 386,388c298
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="Samtidigt" pos="AB">Samtidigt</token>
 <     </ne>
 ---
 >     <token word="Samtidigt" kb-ne="TME" pos="AB">Samtidigt</token>
 390,392c300
-<     <ne>
+<     <ne ex="ENAMEX" subtype="CRP" type="ORG">
 <       <token word="Ikea" pos="PM">Ikea</token>
 <     </ne>
 ---
 >     <token word="Ikea" kb-ne="ORG" pos="PM">Ikea</token>
 395,397c303
-<     <ne>
+<     <ne ex="ENAMEX" subtype="GPL" type="LOC">
 <       <token word="Moskva" pos="PM">Moskva</token>
 <     </ne>
 ---
@@ -346,7 +348,7 @@ Runtime for SWENER: 54 s
 >     <token word="Sjeremetievo" kb-ne="LOC" pos="PM">Sjeremetievo</token>
 >     <token word="internationella" kb-ne="LOC" pos="JJ">internationella</token>
 416,418c322
-<     <ne>
+<     <ne ex="ENAMEX" subtype="CRP" type="ORG">
 <       <token word="Ikea" pos="PM">Ikea</token>
 <     </ne>
 ---
@@ -356,11 +358,11 @@ Runtime for SWENER: 54 s
 ---
 >     <token word="Ikeas" kb-ne="ORG" pos="PM">Ikeas</token>
 514,521c418,421
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="varje" pos="DT">varje</token>
 <       <token word="år" pos="NN">år</token>
 <     </ne>
-<     <ne>
+<     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="i" pos="PP">i</token>
 <       <token word="augusti" pos="NN">augusti</token>
 <     </ne>
