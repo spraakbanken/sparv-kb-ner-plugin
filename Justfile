@@ -5,12 +5,10 @@ default: run-all-tests
 PLATFORM := `uname -o`
 PROJECT := "sparv_kb_ner"
 
-VENV_NAME := env_var_or_default('VIRTUAL_ENV', '.venv')
 INVENV := if env_var_or_default('VIRTUAL_ENV', "") == "" { "poetry run" } else { "" }
 
 info:
 	@echo "Platform: {{PLATFORM}}"
-	@echo "Venv: {{VENV_NAME}}"
 	@echo "INVENV: '{{INVENV}}'"
 
 alias dev := install-dev
