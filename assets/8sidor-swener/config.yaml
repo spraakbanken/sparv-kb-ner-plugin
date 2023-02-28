@@ -1,0 +1,19 @@
+metadata:
+    id: 8sidor-swener
+    language: swe
+
+import:
+    text_annotation: corpus
+    importer: xml_import:parse
+
+xml_export:
+    annotations:
+        - <sentence>
+        - <token:word>
+        - <token>:stanza.pos
+        - swener.ne:swener.ex
+        - swener.ne:swener.type
+        - swener.ne:swener.subtype
+
+sparv:
+    compression: none
