@@ -1,0 +1,16 @@
+metadata:
+    id: ikea-swener
+    language: swe
+
+import:
+    importer: text_import:parse
+
+xml_export:
+    annotations:
+        - <sentence>
+        - <token:word>
+        - <token>:stanza.pos
+        - swener.ne
+
+sparv:
+    compression: none
