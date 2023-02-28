@@ -10,7 +10,9 @@ xml_export:
         - <sentence>
         - <token:word>
         - <token>:stanza.pos
-        - swener.ne
+        - swener.ne:swener.ex
+        - swener.ne:swener.type
+        - swener.ne:swener.subtype
 
 sparv:
     compression: none
