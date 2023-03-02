@@ -105,7 +105,7 @@ def interleave_tags_and_sentence(tokens: list[Token], sentence: str) -> list[str
                 tokens[curr_token].word,
                 tokens[curr_token].entity,
             )
-            tags.append(tokens[curr_token].entity)
+            tags.append(translate_tag(tokens[curr_token].entity))
             curr = find_word_ending(sentence, tokens[curr_token].end)
             curr_token += 1
         else:
@@ -129,3 +129,10 @@ def find_word_ending(sentence: str, token_end: int) -> int:
     while token_end < len(sentence) and sentence[token_end] != " ":
         token_end += 1
     return token_end
+
+
+TAGS = {"PER": "PRS"}
+
+
+def translate_tag(tag: str) -> str:
+    return TAGS.get(tag) or tag
