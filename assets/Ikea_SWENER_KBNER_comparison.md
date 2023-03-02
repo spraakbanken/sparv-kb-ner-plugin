@@ -4,13 +4,13 @@ Example text: [Ikea example](./texts/ikea-example.txt)
 
 All annotations are runned with `sparv run`.
 
-Runtime for KBNER:
-- 21s (as txt)
-- 30s (as xml)
+Running times | mean | values | comment
+| - | - | - | -
+KBNER | 25.7s | 30s, 25s, 22s | from xml
+SWENER | 66s | 66s | from xml
+KBNER | 21s | 21s | from txt
+SWENER | 54s | 54s | from txt
 
-Runtime for SWENER:
-- 54s (as txt)
-- 1m6s (as xml)
 
 ```diff
 4,6c4
@@ -29,9 +29,9 @@ Runtime for SWENER:
 <       <token word="Agunnaryd" pos="PM">Agunnaryd</token>
 <     </ne>
 ---
->     <token word="Ingvar" kb-ne="PER" pos="PM">Ingvar</token>
->     <token word="Kamprad" kb-ne="PER" pos="PM">Kamprad</token>
->     <token word="Elmtaryd" kb-ne="PER" pos="PM">Elmtaryd</token>
+>     <token word="Ingvar" kb-ne="PRS" pos="PM">Ingvar</token>
+>     <token word="Kamprad" kb-ne="PRS" pos="PM">Kamprad</token>
+>     <token word="Elmtaryd" kb-ne="PRS" pos="PM">Elmtaryd</token>
 >     <token word="Agunnaryd" kb-ne="LOC" pos="PM">Agunnaryd</token>
 29,31c23
 <     <ne ex="TIMEX" subtype="DAT" type="TME">
@@ -45,8 +45,8 @@ Runtime for SWENER:
 <       <token word="Kamprad" pos="PM">Kamprad</token>
 <     </ne>
 ---
->     <token word="Ingvar" kb-ne="PER" pos="PM">Ingvar</token>
->     <token word="Kamprad" kb-ne="PER" pos="PM">Kamprad</token>
+>     <token word="Ingvar" kb-ne="PRS" pos="PM">Ingvar</token>
+>     <token word="Kamprad" kb-ne="PRS" pos="PM">Kamprad</token>
 46,48c36
 <     <ne ex="ENAMEX" subtype="PPL" type="LOC">
 <       <token word="Nederländerna" pos="PM">Nederländerna</token>
@@ -70,7 +70,7 @@ Runtime for SWENER:
 <       <token word="Kamprad" pos="PM">Kamprad</token>
 <     </ne>
 ---
->     <token word="Kamprad" kb-ne="PER" pos="PM">Kamprad</token>
+>     <token word="Kamprad" kb-ne="PRS" pos="PM">Kamprad</token>
 76,79c58,59
 <     <ne ex="TIMEX" subtype="DAT" type="TME">
 <       <token word="verksamhetsåret" pos="NN">verksamhetsåret</token>
