@@ -70,7 +70,9 @@ def parse_kb_ner_output(
             # tag = tagged_token.strip().split(TAG_SEP)[TAG_COLUMN]
             # tag = tag_mapping.get(tag, tag)
             out_type_annotation[token_index] = tagged_token.tag or ""
-            out_score_annotation[token_index] = tagged_token.score or ""
+            out_score_annotation[token_index] = (
+                str(tagged_token.score) if tagged_token.score else ""
+            )
 
     out_ne_type.write(out_type_annotation)
     out_ne_score.write(out_score_annotation)
