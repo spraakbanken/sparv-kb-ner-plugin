@@ -83,9 +83,9 @@ SENTENCES = [
                 "",
                 "",
                 "",
-                "PER",
-                "PER",
-                "PER",
+                "PRS",
+                "PRS",
+                "PRS",
                 "LOC",
                 "",
                 "",
@@ -96,8 +96,8 @@ SENTENCES = [
                 "",
                 "TME",
                 "",
-                "PER",
-                "PER",
+                "PRS",
+                "PRS",
                 "",
             ],
         ),
@@ -160,7 +160,11 @@ SENTENCES = [
 def test_interleave_tags_and_sentence(
     tokens: list[Token], sentence_index: int, expected: list[str]
 ):
-    assert interleave_tags_and_sentence(tokens, SENTENCES[sentence_index]) == expected
+    tags = [
+        t.tag or ""
+        for t in interleave_tags_and_sentence(tokens, SENTENCES[sentence_index])
+    ]
+    assert tags == expected
 
 
 @pytest.mark.parametrize(

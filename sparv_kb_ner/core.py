@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from sparv.api import annotator, get_logger, Output, Annotation
 
@@ -21,10 +22,15 @@ nlp = pipeline(
 
 @annotator("Named entity tagging with KB-BERT-NER", language=["swe"])
 def annotate(
-    out_ne: Output = Output(
-        "<token>:sparv_kb_ner.kb-ne",
+    out_ne_type: Output = Output(
+        "<token>:sparv_kb_ner.ne_type",
         cls="named_entity",
-        description="Named entity segments from KB-BERT-NER",
+        description="Named entity segment types from KB-BERT-NER",
+    ),
+    out_ne_score: Output = Output(
+        "<token>:sparv_kb_ner.ne_score",
+        cls="named_entity",
+        description="Named entity segment types from KB-BERT-NER",
     ),
     word: Annotation = Annotation("<token:word>"),
     sentence: Annotation = Annotation("<sentence>"),
@@ -32,11 +38,15 @@ def annotate(
     print("sparv_kb_ner")
     logger.debug("word: %s", word)
     # out_ne.write(["hello"])
-    parse_kb_ner_output(sentence=sentence, word=word, out_ne=out_ne)
+    parse_kb_ner_output(
+        sentence=sentence, word=word, out_ne_type=out_ne_type, out_ne_score=out_ne_score
+    )
     # raise RuntimeError("impl")
 
 
-def parse_kb_ner_output(sentence: Annotation, word: Annotation, out_ne: Output):
+def parse_kb_ner_output(
+    sentence: Annotation, word: Annotation, out_ne_type: Output, out_ne_score: Output
+):
     sentences, _orphans = sentence.get_children(word)
     token_word = list(word.read())
     sentences_to_tag = [
@@ -44,7 +54,8 @@ def parse_kb_ner_output(sentence: Annotation, word: Annotation, out_ne: Output):
         for sent in sentences
     ]
     # stdout = run_nlp(stdin)
-    out_annotation = word.create_empty_attribute()
+    out_type_annotation = word.create_empty_attribute()
+    out_score_annotation = word.create_empty_attribute()
     for sent, sent_to_tag in zip(sentences, sentences_to_tag, strict=True):
         tagged_tokens = run_nlp_on_sentence(sent_to_tag)
         logger.debug("tagged_tokens = %s", tagged_tokens)
@@ -58,9 +69,17 @@ def parse_kb_ner_output(sentence: Annotation, word: Annotation, out_ne: Output):
             )
             # tag = tagged_token.strip().split(TAG_SEP)[TAG_COLUMN]
             # tag = tag_mapping.get(tag, tag)
-            out_annotation[token_index] = tagged_token
+            out_type_annotation[token_index] = tagged_token.tag or ""
+            out_score_annotation[token_index] = tagged_token.score or ""
 
-    out_ne.write(out_annotation)
+    out_ne_type.write(out_type_annotation)
+    out_ne_score.write(out_score_annotation)
+
+
+@dataclass
+class TaggedToken:
+    tag: Optional[str]
+    score: Optional[float]
 
 
 @dataclass
@@ -73,7 +92,7 @@ class Token:
     index: int
 
 
-def run_nlp_on_sentence(sentence: str) -> list[str]:
+def run_nlp_on_sentence(sentence: str) -> list[TaggedToken]:
     tokens = []
     for token in nlp(sentence):
         logger.debug("nlp: token = %s", token)
@@ -88,7 +107,9 @@ def run_nlp_on_sentence(sentence: str) -> list[str]:
     return interleave_tags_and_sentence(tokens, sentence)
 
 
-def interleave_tags_and_sentence(tokens: list[Token], sentence: str) -> list[str]:
+def interleave_tags_and_sentence(
+    tokens: list[Token], sentence: str
+) -> list[TaggedToken]:
     logger.debug("tokens = %s", tokens)
     logger.debug("sentence = %s", sentence)
     tags = []
@@ -96,20 +117,21 @@ def interleave_tags_and_sentence(tokens: list[Token], sentence: str) -> list[str
     curr: int = 0
     curr_token = 0
     while curr < end:
-        print(f"while {curr=} < {end=}: {curr_token=}, {sentence[curr:]=}")
-        # print(f"{curr=}, {end=}, {curr_token=}")
         if curr_token < len(tokens) and tokens[curr_token].start == curr:
-            print("in token")
             logger.debug(
                 "word = %s, tag = %s",
                 tokens[curr_token].word,
                 tokens[curr_token].entity,
             )
-            tags.append(translate_tag(tokens[curr_token].entity))
+            tags.append(
+                TaggedToken(
+                    tag=translate_tag(tokens[curr_token].entity),
+                    score=tokens[curr_token].score,
+                )
+            )
             curr = find_word_ending(sentence, tokens[curr_token].end)
             curr_token += 1
         else:
-            print("not in token")
             part_end = tokens[curr_token].start if curr_token < len(tokens) else end
             part = sentence[curr:part_end]
             logger.debug("part='%s'", part)
@@ -119,7 +141,7 @@ def interleave_tags_and_sentence(tokens: list[Token], sentence: str) -> list[str
                 # print(f"{parts=}")
                 for word in parts:
                     logger.debug("word = %s", word)
-                    tags.append("")
+                    tags.append(TaggedToken(tag=None, score=None))
             curr = part_end
     return tags
 
