@@ -3,7 +3,8 @@ metadata:
     language: swe
 
 import:
-    importer: text_import:parse
+    text_annotation: text
+    importer: xml_import:parse
 
 xml_export:
     annotations:
