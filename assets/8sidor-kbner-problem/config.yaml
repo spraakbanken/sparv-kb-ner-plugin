@@ -1,0 +1,18 @@
+metadata:
+    id: 8sidor-kbner-problem
+    language: swe
+
+import:
+    text_annotation: text
+    importer: xml_import:parse
+
+xml_export:
+    annotations:
+        - <sentence>
+        - <token:word>
+        - <token>:stanza.pos
+        - <token>:sparv_kb_ner.ne_type
+        - <token>:sparv_kb_ner.ne_score
+
+sparv:
+    compression: none
