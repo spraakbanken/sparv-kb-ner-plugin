@@ -135,3 +135,6 @@ dmypy.json
 .snakemake
 sparv-workdir
 xml_export.pretty
+
+# Editor config
+.vscode/
