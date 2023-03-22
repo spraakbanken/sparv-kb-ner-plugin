@@ -3,7 +3,7 @@ metadata:
     language: swe
 
 import:
-    text_annotation: corpus
+    text_annotation: text
     importer: xml_import:parse
 
 xml_export:
