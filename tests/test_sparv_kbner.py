@@ -1,15 +1,32 @@
-from sparv_kb_ner.core import Token, find_word_ending, interleave_tags_and_sentence
+from typing import Optional
+from sparv_kb_ner.core import (
+    Token,
+    find_word_ending,
+    interleave_tags_and_sentence,
+    interleave_tags_and_tokens,
+    run_nlp_on_sentence,
+    run_nlp_on_tokens,
+)
 import pytest
 
 
-SENTENCES = [
-    "Ikea ( namnet är bildat av initialerna för Ingvar Kamprad Elmtaryd Agunnaryd ) är ett multinationellt möbelföretag som grundades 1943 av Ingvar Kamprad .",  # noqa: E501
-    "Under verksamhetsåret 2012 omsatte Ikeakoncernen 241 miljarder kronor .",
-]
+SENTENCES = {
+    "ikea": "Ikea ( namnet är bildat av initialerna för Ingvar Kamprad Elmtaryd Agunnaryd ) är ett multinationellt möbelföretag som grundades 1943 av Ingvar Kamprad .",  # noqa: E501
+    "verksamhetsåret": "Under verksamhetsåret 2012 omsatte Ikeakoncernen 241 miljarder kronor .",  # noqa: E501
+    "kammerling": "– Jag tycker att Sveriges landslag ska vara nöjda , säger experten Anna-Karin Kammerling till Sveriges Radio .",  # noqa: E501
+    "gruppen": "Gruppen föreslår ändringar i reglerna för 2,7 miljarder kronor .",
+    "belarusen": "Poliser grep sedan två personer på flygplanet , belarusen Roman Protasevitj och hans flickvän Sofia Sapega .",  # noqa: E501
+    "det-börjar": "Den börjar klockan 19.15 .",
+    "encrochat": "Det programmet heter Encrochat .",
+    "artisterna": "Det är till exempel artisterna Tusse , Dotter och Kikki Danielsson .",  # noqa: E501
+    "street-race": "Filmerna handlar bland annat om olagliga tävlingar med bilar som kallas street-race .",  # noqa: E501
+    "kvinnolobby": "Det säger Clara Berglund som är ledare för gruppen Sveriges kvinnolobby .",  # noqa: E501
+    "internet": "Det går också att kolla klockan på internet på sajten 90510.se .",
+}
 
 
 @pytest.mark.parametrize(
-    "tokens, sentence_index, expected",
+    "tokens, sentence_name, expected",
     [
         (
             [
@@ -73,7 +90,7 @@ SENTENCES = [
                     index=31,
                 ),
             ],
-            0,
+            "ikea",
             [
                 "ORG",
                 "",
@@ -152,26 +169,396 @@ SENTENCES = [
                     index=10,
                 ),
             ],
-            1,
+            "verksamhetsåret",
             ["", "TME", "TME", "", "ORG", "MSR", "MSR", "MSR", ""],
+        ),
+        (
+            [
+                Token(
+                    word="Sveriges",
+                    entity="LOC",
+                    start=17,
+                    end=25,
+                    score=0.6952171,
+                    index=5,
+                ),
+                Token(
+                    word="landslag",
+                    entity="ORG",
+                    start=26,
+                    end=34,
+                    score=0.5673877,
+                    index=6,
+                ),
+                Token(
+                    word="Anna-Karin",
+                    entity="PER",
+                    start=67,
+                    end=77,
+                    score=0.99983525,
+                    index=13,
+                ),
+                Token(
+                    word="Kammerling",
+                    entity="PER",
+                    start=78,
+                    end=88,
+                    score=0.99981195,
+                    index=16,
+                ),
+                Token(
+                    word="Sveriges",
+                    entity="ORG",
+                    start=94,
+                    end=102,
+                    score=0.9979777,
+                    index=20,
+                ),
+                Token(
+                    word="Radio",
+                    entity="ORG",
+                    start=103,
+                    end=108,
+                    score=0.9971181,
+                    index=21,
+                ),
+            ],
+            "kammerling",
+            [
+                "",
+                "",
+                "",
+                "",
+                "LOC",
+                "ORG",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "PRS",
+                "PRS",
+                "",
+                "ORG",
+                "ORG",
+                "",
+            ],
+        ),
+        (
+            [
+                Token(
+                    word="2,7", entity="MSR", start=42, end=45, score=0.9998472, index=7
+                ),
+                Token(
+                    word="miljarder",
+                    entity="MSR",
+                    start=46,
+                    end=55,
+                    score=0.99979943,
+                    index=10,
+                ),
+                Token(
+                    word="kronor",
+                    entity="MSR",
+                    start=56,
+                    end=62,
+                    score=0.9997632,
+                    index=11,
+                ),
+            ],
+            "gruppen",
+            ["", "", "", "", "", "", "MSR", "MSR", "MSR", ""],
+        ),
+        (
+            [
+                Token(
+                    word="Roman",
+                    entity="PER",
+                    start=58,
+                    end=63,
+                    score=0.99971503,
+                    index=13,
+                ),
+                Token(
+                    word="Protasevitj",
+                    entity="PER",
+                    start=64,
+                    end=75,
+                    score=0.9995414,
+                    index=14,
+                ),
+                Token(
+                    word="Sofia",
+                    entity="PER",
+                    start=94,
+                    end=99,
+                    score=0.99979895,
+                    index=21,
+                ),
+                Token(
+                    word="Sapega",
+                    entity="PER",
+                    start=100,
+                    end=106,
+                    score=0.9995235,
+                    index=22,
+                ),
+            ],
+            "belarusen",
+            [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "PRS",
+                "PRS",
+                "",
+                "",
+                "",
+                "PRS",
+                "PRS",
+                "",
+            ],
+        ),
+        (
+            [
+                Token(
+                    word="klockan",
+                    entity="TME",
+                    start=11,
+                    end=18,
+                    score=0.9978672,
+                    index=3,
+                ),
+                Token(
+                    word="19.15",
+                    entity="TME",
+                    start=19,
+                    end=24,
+                    score=0.99645376,
+                    index=4,
+                ),
+            ],
+            "det-börjar",
+            ["", "", "TME", "TME", ""],
         ),
     ],
 )
 def test_interleave_tags_and_sentence(
-    tokens: list[Token], sentence_index: int, expected: list[str]
+    tokens: list[Token], sentence_name: str, expected: list[str]
 ):
     tags = [
         t.tag or ""
-        for t in interleave_tags_and_sentence(tokens, SENTENCES[sentence_index])
+        for t in interleave_tags_and_sentence(tokens, SENTENCES[sentence_name])
     ]
     assert tags == expected
 
 
 @pytest.mark.parametrize(
-    "sentence_index, token_end, expected", [(1, 21, 21), (1, 39, 48)]
+    "sentence_name, token_end, expected",
+    [("verksamhetsåret", 21, 21), ("verksamhetsåret", 39, 48), ("encrochat", 28, 30)],
 )
-def test_find_word_ending(sentence_index: int, token_end: int, expected: int) -> None:
-    sentence = SENTENCES[sentence_index]
+def test_find_word_ending(sentence_name: str, token_end: int, expected: int) -> None:
+    sentence = SENTENCES[sentence_name]
 
     assert find_word_ending(sentence, token_end) == expected
     assert sentence[find_word_ending(sentence, token_end)] == " "
+
+
+# @pytest.mark.parametrize(
+#     "sentence_name, expected_tags",
+#     [
+#         (
+#             "belarusen",
+#             [
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 "PRS",
+#                 "PRS",
+#                 None,
+#                 None,
+#                 None,
+#                 "PRS",
+#                 "PRS",
+#                 None,
+#             ],
+#         ),
+#         ("det-börjar", [None, None, "TME", "TME", None]),
+#         # ("encrochat", [None, None, None, "PRS", None]),
+#         (
+#             "artisterna",
+#             [
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 "PRS",
+#                 "PRS",  # TODO Should this be None?,
+#                 "PRS",
+#                 "PRS",  # TODO Should this be None?,
+#                 "PRS",
+#                 "PRS",
+#                 None,
+#             ],
+#         ),
+#         (
+#             "street-race",
+#             [
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 "EVN",
+#                 None,
+#             ],
+#         ),
+#         (
+#             "kvinnolobby",
+#             [None, None, "PRS", "PRS", None, None, None, None, None, "LOC", None, None],
+#         ),
+#         (
+#             "internet",
+#             [
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 None,
+#                 "WRK",
+#                 None,
+#             ],
+#         ),
+#     ],
+# )
+# def test_interleave_tags_and_sentence_run_nlp_on_sentence(
+#     sentence_name: str, expected_tags: list[Optional[str]]
+# ) -> None:
+#     sentence = SENTENCES[sentence_name]
+
+#     result = interleave_tags_and_sentence(run_nlp_on_sentence(sentence), sentence)
+#     tags = [t.tag for t in result]
+#     assert tags == expected_tags
+
+
+@pytest.mark.parametrize(
+    "sentence_name, expected_tags",
+    [
+        (
+            "belarusen",
+            [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                "PRS",
+                "PRS",
+                None,
+                None,
+                None,
+                "PRS",
+                "PRS",
+                None,
+            ],
+        ),
+        ("det-börjar", [None, None, "TME", "TME", None]),
+        # ("encrochat", [None, None, None, "PRS", None]),
+        (
+            "artisterna",
+            [
+                None,
+                None,
+                None,
+                None,
+                None,
+                "PRS",
+                "PRS",  # TODO Should this be None?,
+                "PRS",
+                "PRS",  # TODO Should this be None?,
+                "PRS",
+                "PRS",
+                None,
+            ],
+        ),
+        (
+            "street-race",
+            [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                "EVN",
+                None,
+            ],
+        ),
+        (
+            "kvinnolobby",
+            [None, None, "PRS", "PRS", None, None, None, None, None, "LOC", None, None],
+        ),
+        (
+            "internet",
+            [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                "WRK",
+                None,
+            ],
+        ),
+    ],
+)
+def test_interleave_tags_and_tokens_run_nlp_on_sentence(
+    sentence_name: str, expected_tags: list[Optional[str]]
+) -> None:
+    sentence = SENTENCES[sentence_name]
+    token_word = sentence.split(" ")
+    sent = list(range(len(token_word)))
+    result = interleave_tags_and_tokens(
+        run_nlp_on_sentence(sentence), token_word, sent, sentence
+    )
+    tags = [t.tag for t in result]
+    assert tags == expected_tags

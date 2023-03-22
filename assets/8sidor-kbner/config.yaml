@@ -3,16 +3,23 @@ metadata:
     language: swe
 
 import:
-    text_annotation: corpus
+    text_annotation: text
     importer: xml_import:parse
+
+xml_import:
+    elements:
+        - p
 
 xml_export:
     annotations:
         - <sentence>
+        - <paragraph>
         - <token:word>
         - <token>:stanza.pos
         - <token>:sparv_kb_ner.ne_type
         - <token>:sparv_kb_ner.ne_score
 
+classes:
+    paragraph: p
 sparv:
     compression: none
