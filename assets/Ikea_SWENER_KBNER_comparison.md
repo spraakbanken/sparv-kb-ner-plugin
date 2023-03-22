@@ -1,6 +1,6 @@
 # Comparison between KBNER and SWENER
 
-Example text: [Ikea example](./texts/ikea-example.txt)
+Example text: [Ikea example](./texts/ikea-example.xml)
 
 All annotations are runned with `sparv run`.
 
@@ -363,3 +363,4 @@ SWENER | 54s | 54s | from txt
 >     <token word="år" ne_score="0.9990212" ne_type="TME" pos="NN">år</token>
 >     <token word="i" ne_score="0.9996105" ne_type="TME" pos="PP">i</token>
 >     <token word="augusti" ne_score="0.99937123" ne_type="TME" pos="NN">augusti</token>
+```
