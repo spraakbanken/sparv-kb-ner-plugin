@@ -47,6 +47,16 @@ The mapping of tokens and ner_tags were rewritten to handle all cases in this ex
 3433 | 1h23m24s | 1h23m24s | 1.46
 
 
+## Optimizations
+
+### KBNER
+| `#<text>` | mean | values | `s/<text>`
+| - | - | - | - |
+60 | 1m11s | 1m11s | 1.18
+120 | 2m32s | 2m32s | 
+180 |  |  | 
+3433 |  |  | 
+
 
 
 
