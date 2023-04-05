@@ -6,7 +6,7 @@ All annotations are runned with `sparv run`.
 
 Running times | mean | values | comment
 | - | - | - | -
-KBNER | 23.7s | 30s, 25s, 22s, 16s | from xml
+KBNER | 23.7s | 30s, 25s, 22s, 16s, 19s | from xml
 SWENER | 66s | 66s | from xml
 KBNER | 21s | 21s | from txt
 SWENER | 54s | 54s | from txt
