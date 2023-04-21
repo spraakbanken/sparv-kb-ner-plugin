@@ -110,39 +110,42 @@ def parse_kb_ner_output(
 
 
 def run_nlp_on_sentence(sentence: str) -> list[dict]:
-    logger.info("run_nlp_on_sentence(sentence='%s') called", sentence)
+    logger.info("run_nlp_on_sentence(len(sentence)='%d') called", len(sentence))
     tokens = []
-    linking_token = ""
+    # linking_token = ""
     found_link = False
     for token in nlp(sentence):
         # logger.debug("nlp: token = %s", token)
         if token["word"].startswith("##"):
             # logger.debug("found ## in %s", token["word"])
             if tokens and token["start"] == tokens[-1]["end"]:
-
                 tokens[-1]["word"] += token["word"][2:]
                 tokens[-1]["end"] = token["end"]
-            else:
-                logger.info(
-                    "found ## in '%s' (start=%d, end=%d) but no prev token, skipping ... ",
-                    token["word"],
-                    token["start"],
-                    token["end"],
-                )
-                # tokens.append(Token(**token))
+            # else:
+            #     logger.info(
+            #         "found ## in '%s' (start=%d, end=%d) but no prev token, skipping ... ",
+            #         token["word"],
+            #         token["start"],
+            #         token["end"],
+            #     )
+            # tokens.append(Token(**token))
         elif found_link:
             # logger.debug("found '%s' before word '%s'", linking_token, token["word"])
             found_link = False
             if token["start"] == tokens[-1]["end"]:
-                amend_token_to_last(token, tokens)
+                tokens[-1]["word"] += token["word"]
+                tokens[-1]["end"] = token["end"]
+                # amend_token_to_last(token, tokens)
             else:
                 tokens.append(token)
         elif token["word"] in [",", ".", "-"]:
-            linking_token = token["word"]
+            # linking_token = token["word"]
             # logger.debug("found '%s'", linking_token)
             found_link = True
             if token["start"] == tokens[-1]["end"]:
-                amend_token_to_last(token, tokens)
+                tokens[-1]["word"] += token["word"]
+                tokens[-1]["end"] = token["end"]
+                # amend_token_to_last(token, tokens)
             else:
                 tokens.append(token)
         else:
@@ -163,15 +166,17 @@ def interleave_tags_and_tokens(
 ) -> Iterable[Tuple[int, str, str]]:
     # ) -> Iterable[TaggedToken]:
     logger.info("interleave_tags_and_tokens.tokens = %s", tokens)
-    logger.debug("interleave_tags_and_tokens.sentence = %s", sentence)
+    # logger.debug("interleave_tags_and_tokens.sentence = %s", sentence)
     curr_token = 0
+    if curr_token >= len(tokens):
+        return
     end = len(sentence)
     curr_sent = 0
     curr_word_start = 0
-    curr_word_end = end
-    token_start = tokens[curr_token]["start"] if curr_token < len(tokens) else end
-    while curr_sent < len(sent):
-        curr_word_end = curr_word_start + len(token_word[sent[curr_sent]])
+    curr_word_end = len(sentence)
+    token_start = tokens[curr_token]["start"]
+    for curr_sent in sent:
+        curr_word_end = curr_word_start + len(token_word[curr_sent])
 
         # logger.debug(
         #     "curr_word = '%s' [%d:%d] (%s), curr_token = '%s' [%d:%d]",
@@ -202,7 +207,7 @@ def interleave_tags_and_tokens(
             #         curr_word,
             #     )
             yield (
-                sent[curr_sent],
+                curr_sent,
                 translate_tag(tokens[curr_token]["entity"]),
                 str(tokens[curr_token]["score"]),
             )
@@ -211,15 +216,15 @@ def interleave_tags_and_tokens(
             #     score=tokens[curr_token].score,
             # )
             curr_token += 1
-            token_start = (
-                tokens[curr_token]["start"] if curr_token < len(tokens) else end
-            )
+            if curr_token >= len(tokens):
+                break
+            token_start = tokens[curr_token]["start"]
         # else:
         #     yield ("", "")
         # yield TaggedToken.default()
         # update curr_word
-        curr_word_start += len(token_word[sent[curr_sent]]) + 1
-        curr_sent += 1
+        curr_word_start += len(token_word[curr_sent]) + 1
+        # curr_sent += 1
 
 
 # def interleave_tags_and_sentence(
