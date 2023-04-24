@@ -70,7 +70,9 @@ def parse_kb_ner_output(
         # logger.debug("sent = %s", sent)
         # for token_index, tagged_token in zip(sent, tagged_tokens, strict=True):
         for token_index, tag, score in interleave_tags_and_tokens(
-            run_nlp_on_sentence(sent_to_tag), token_word, sent, sent_to_tag
+            run_nlp_on_sentence(sent_to_tag),
+            token_word,
+            sent,  # sent_to_tag
         ):
             # logger.debug(
             #     "token_index = %d, tagged_token = (%s,%s), token_word = %s",
@@ -119,7 +121,7 @@ def run_nlp_on_sentence(sentence: str) -> list[dict]:
         if token["word"].startswith("##"):
             # logger.debug("found ## in %s", token["word"])
             if tokens and token["start"] == tokens[-1]["end"]:
-                tokens[-1]["word"] += token["word"][2:]
+                # tokens[-1]["word"] += token["word"][2:]
                 tokens[-1]["end"] = token["end"]
             # else:
             #     logger.info(
@@ -133,7 +135,7 @@ def run_nlp_on_sentence(sentence: str) -> list[dict]:
             # logger.debug("found '%s' before word '%s'", linking_token, token["word"])
             found_link = False
             if token["start"] == tokens[-1]["end"]:
-                tokens[-1]["word"] += token["word"]
+                # tokens[-1]["word"] += token["word"]
                 tokens[-1]["end"] = token["end"]
                 # amend_token_to_last(token, tokens)
             else:
@@ -143,7 +145,7 @@ def run_nlp_on_sentence(sentence: str) -> list[dict]:
             # logger.debug("found '%s'", linking_token)
             found_link = True
             if token["start"] == tokens[-1]["end"]:
-                tokens[-1]["word"] += token["word"]
+                # tokens[-1]["word"] += token["word"]
                 tokens[-1]["end"] = token["end"]
                 # amend_token_to_last(token, tokens)
             else:
@@ -162,7 +164,7 @@ def amend_token_to_last(token, tokens):
 
 
 def interleave_tags_and_tokens(
-    tokens: list[dict], token_word: list[str], sent: list[int], sentence: str
+    tokens: list[dict], token_word: list[str], sent: list[int]  # , sentence: str
 ) -> Iterable[Tuple[int, str, str]]:
     # ) -> Iterable[TaggedToken]:
     logger.info("interleave_tags_and_tokens.tokens = %s", tokens)
@@ -170,10 +172,10 @@ def interleave_tags_and_tokens(
     curr_token = 0
     if curr_token >= len(tokens):
         return
-    end = len(sentence)
+    # end = len(sentence)
     curr_sent = 0
     curr_word_start = 0
-    curr_word_end = len(sentence)
+    # curr_word_end = len(sentence)
     token_start = tokens[curr_token]["start"]
     for curr_sent in sent:
         curr_word_end = curr_word_start + len(token_word[curr_sent])

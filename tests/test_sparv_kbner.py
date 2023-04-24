@@ -519,7 +519,9 @@ def test_interleave_tags_and_tokens_run_nlp_on_sentence(
     token_word = sentence.split(" ")
     sent = list(range(len(token_word)))
     result = interleave_tags_and_tokens(
-        run_nlp_on_sentence(sentence), token_word, sent, sentence
+        run_nlp_on_sentence(sentence),
+        token_word,
+        sent,  # sentence
     )
     tags = [(t[0], t[1]) for t in result]
     assert tags == expected_tags

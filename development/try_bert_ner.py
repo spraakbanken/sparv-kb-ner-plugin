@@ -18,6 +18,8 @@ def main():
 
     num_words = len(text.split(" "))
     tokens = []
+    token_iter = nlp(text)
+    print(f"type of token_iter = {type(token_iter)}")
     for token in nlp(text):
         if token["word"].startswith("##"):
             tokens[-1]["word"] += token["word"][2:]
