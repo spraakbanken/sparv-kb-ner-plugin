@@ -3,8 +3,10 @@ metadata:
     language: swe
 
 sparv_kb_ner:
+    pipeline: "huggingface_ner"
     model: "KBLab/bert-base-swedish-cased-ner"
     tokenizer: "KBLab/bert-base-swedish-cased-ner"
+
 # custom_annotations:
 #     - annotator: custom.
 import:

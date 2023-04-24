@@ -53,12 +53,22 @@ The mapping of tokens and ner_tags were rewritten to handle all cases in this ex
 | `#<text>` | mean | values | `s/<text>`
 | - | - | - | - |
 60 | 1m11s | 1m11s | 1.18
-120 | 2m32s | 2m32s | 
-180 |  |  | 
-3433 |  |  | 
+120 | 2m32s | 2m32s |
+180 |  |  |
+3433 |  |  |
 
+## Using KBlab/bert-base-swedish-lowermix-reallysimple-ner
 
-
+| `#<text>` | mean | values | `s/<text>`
+| - | - | - | - |
+1 | s | s | .
+2 | s | s | .
+3 | 25s | 25s, 21s | .
+30 | 1m01s | 1m01s, 59s | .
+60 | 1m47s | 1m47s | .
+120 | 3m14s | 3m14s | .
+180 | ms | ms | .
+3433 | ms | ms | .
 
 ```diff
 ```
