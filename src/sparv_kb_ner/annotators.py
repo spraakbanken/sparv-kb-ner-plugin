@@ -11,7 +11,7 @@ from sparv.api import (
 )
 
 # from transformers import AutoTokenizer, AutoModelForTokenClassification
-from sparv_kb_ner import huggingface_ner_pipeline, core
+from sparv_kb_ner import huggingface_ner_pipeline, custom_ner_pipeline
 from sparv_kb_ner.ner_pipeline import NerPipeline
 
 logger = get_logger(__name__)
@@ -45,7 +45,7 @@ def ner_pipeline_preloader(
     if pipeline == "huggingface_ner":
         return huggingface_ner_pipeline.load_model(model_name, tokenizer_name)
     elif pipeline == "custom_ner":
-        return core.load_model(model_name, tokenizer_name)
+        return custom_ner_pipeline.load_model(model_name, tokenizer_name)
     else:
         raise SparvErrorMessage(f"Unknown pipeline '{pipeline}'")
 
