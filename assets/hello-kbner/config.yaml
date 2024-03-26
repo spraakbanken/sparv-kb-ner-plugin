@@ -2,6 +2,10 @@ metadata:
     id: hello-kbner
     language: swe
 
+sparv_kb_ner:
+    model: "KBLab/bert-base-swedish-cased-ner"
+    tokenizer: "KBLab/bert-base-swedish-cased-ner"
+
 import:
     importer: text_import:parse
 
@@ -10,7 +14,8 @@ xml_export:
         - <sentence>
         - <token:word>
         - <token>:stanza.pos
-        - <token>:sparv_kb_ner.kb-ne
+        - <token>:sparv_kb_ner.ne_type
+        - <token>:sparv_kb_ner.ne_score
 
 sparv:
     compression: none

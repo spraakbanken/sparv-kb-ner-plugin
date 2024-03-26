@@ -6,7 +6,6 @@
 #   features: []
 #   all-features: false
 
--e file:sparv-bert-mask-plugin
 -e file:.
 appdirs==1.4.4
 argcomplete==3.0.5

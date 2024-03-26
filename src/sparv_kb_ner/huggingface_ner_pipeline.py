@@ -231,17 +231,11 @@ def tokenize_and_align_labels(examples):
         label_ids = []
         for word_idx in word_ids:  # Set the special tokens to -100.
             # logger.debug("word_idx = %s", word_idx)
-            if word_idx is None:
+            if word_idx is None or word_idx == previous_word_idx:
                 label_ids.append(-100)
-            elif (
-                word_idx != previous_word_idx
-            ):  # Only label the first token of a given word.
+            else:  # Only label the first token of a given word.
                 # logger.debug("FIRST TOKEN: label[word_idx]=%s", label[word_idx])
                 label_ids.append((word_idx, label[word_idx]))
-            else:
-                # logger.debug("      TOKEN: label[word_idx]=%s", label[word_idx])
-
-                label_ids.append(-100)
             previous_word_idx = word_idx
         labels.append(label_ids)
 
