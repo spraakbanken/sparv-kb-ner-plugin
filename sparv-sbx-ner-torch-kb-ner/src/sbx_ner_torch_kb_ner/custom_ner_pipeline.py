@@ -7,7 +7,6 @@ from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 import torch
 
-from sparv_kb_ner.ner_pipeline import NerPipeline
 
 
 logger = get_logger(__name__)
@@ -17,7 +16,7 @@ SENT_SEP = "\n"
 TOK_SEP = " "
 
 
-def load_model(model_name: str, tokenizer_name: str) -> NerPipeline:
+def load_model(model_name: str, tokenizer_name: str) :
     logger.info(
         "preloading CustomNerPipeline(model=%s, tokenizer=%s)",
         model_name,
@@ -38,7 +37,7 @@ def load_model(model_name: str, tokenizer_name: str) -> NerPipeline:
     )
 
 
-class CustomNerPipeline(NerPipeline):
+class CustomNerPipeline:
     def __init__(self, model, tokenizer) -> None:
         self.model = model
         self.tokenizer = tokenizer
