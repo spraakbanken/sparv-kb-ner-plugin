@@ -138,3 +138,4 @@ xml_export.pretty
 
 # Editor config
 .vscode/
+.pdm-python

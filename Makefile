@@ -57,7 +57,7 @@ help:
 	@echo ""
 
 PLATFORM := `uname -o`
-REPO := "<REPO-NAME-HERE>"
+REPO := "sparv-sbx-ner"
 PROJECT_SRC := "<SRC-FOLDER-HERE>"
 
 ifeq (${VIRTUAL_ENV},)
