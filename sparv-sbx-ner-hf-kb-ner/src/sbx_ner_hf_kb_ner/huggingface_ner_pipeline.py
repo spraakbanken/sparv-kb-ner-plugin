@@ -5,7 +5,6 @@ from sparv.api import annotator, get_logger, Output, Annotation
 
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForTokenClassification
-from sparv_kb_ner.ner_pipeline import NerPipeline
 
 
 logger = get_logger(__name__)
@@ -24,7 +23,7 @@ model = AutoModelForTokenClassification.from_pretrained(
 )
 
 
-class HuggingFaceNerPipeline(NerPipeline):
+class HuggingFaceNerPipeline:
     def __init__(self, model_pipeline) -> None:
         self.model_pipeline = model_pipeline
 
