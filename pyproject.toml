@@ -1,0 +1,16 @@
+[project]
+name = "sparv-sbx-ner-workspace"
+dependencies = []
+requires-python = ">=3.9"
+version = "0.0.0"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "-e sbx-ner-hf-kb-ner @ file:///${PROJECT_ROOT}/sparv-sbx-ner-hf-kb-ner",
+    "-e sbx-ner-torch-kb-ner @ file:///${PROJECT_ROOT}/sparv-sbx-ner-torch-kb-ner",
+    "pytest>=8.1.1",
+    "pytest-cov>=4.1.0",
+    "mypy>=1.9.0",
+    "ruff>=0.3.2",
+    "bump-my-version>=0.19.0",
+]
