@@ -18,9 +18,8 @@ tokenizer = AutoTokenizer.from_pretrained(
     "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
 )
 
-model = AutoModelForTokenClassification.from_pretrained(
-    "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
-)
+MODEL_NAME = "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
+MODEL_REVISION = ""
 
 
 class HuggingFaceNerPipeline:
@@ -114,7 +113,14 @@ class HuggingFaceNerPipeline:
         out_ne_score.write(out_score_annotation)
 
 
-def load_model(model: str, tokenizer: str) -> NerPipeline:
+def load_model(model: str, tokenizer: str) -> HuggingFaceNerPipeline:
+    tokenizer = AutoTokenizer.from_pretrained(
+    "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
+)
+
+    model = AutoModelForTokenClassification.from_pretrained(
+        "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
+    )
     logger.info(
         "preloading HuggingFaceNerPipeline(model=%s, tokenizer=%s)", model, tokenizer
     )

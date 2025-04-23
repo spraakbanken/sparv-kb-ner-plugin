@@ -57,7 +57,7 @@ def ner_pipeline_preloader(
     preloader_params=["pipeline", "model_name", "tokenizer_name"],
     preloader_target="model_preloaded",
 )
-def annotate_ner(
+def annotate_sbx_ner_torch_kb_ner(
     out_ne_type: Output = Output(
         "<token>:sparv_kb_ner.ne_type",
         cls="named_entity",
