@@ -226,8 +226,10 @@ rpds-py==0.28.0
 ruff==0.14.3
 safetensors==0.6.2
     # via transformers
-setuptools==80.9.0 ; python_full_version >= '3.12'
-    # via torch
+setuptools==80.9.0
+    # via
+    #   sparv-kb-ner
+    #   torch
 six==1.17.0
     # via python-dateutil
 smart-open==7.4.4
