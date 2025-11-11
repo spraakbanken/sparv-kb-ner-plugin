@@ -1539,7 +1539,7 @@ wheels = [
 ]
 
 [[package]]
-name = "sparv-kb-ner"
+name = "sparv-sbx-named-entities-kb-ner"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

@@ -1,5 +1,5 @@
 [project]
-name = "sparv-kb-ner"
+name = "sparv-sbx-named-entities-kb-ner"
 version = "0.1.0"
 description = "Add your description here"
 authors = [
@@ -19,10 +19,10 @@ requires = ["uv_build>=0.9.6,<0.10.0"]
 build-backend = "uv_build"
 
 [project.entry-points."sparv.plugin"]
-sparv_kb_ner = "sparv_kb_ner"
+sbx_named_entities_kb_ner = "sbx_named_entities_kb_ner"
 
 [tool.uv.build-backend]
-module-name = ["sparv_kb_ner"]
+module-name = ["sbx_named_entities_kb_ner"]
 source-exclude = ["/.github", "/docs"]
 
 [dependency-groups]
