@@ -57,8 +57,8 @@ help:
 	@echo ""
 
 PLATFORM := `uname -o`
-REPO := sparv-kb-ner-plugin
-PROJECT_SRC := sparv_kb_ner
+REPO := sparv-sbx-named-entities-kb-ner
+PROJECT_SRC := src/sbx_named_entities_kb_ner
 
 ifeq (${VIRTUAL_ENV},)
   VENV_NAME = .venv
@@ -115,7 +115,7 @@ doc-tests:
 .PHONY: type-check
 # check types
 type-check:
-	${INVENV} mypy ${PROJECT_SRC} ${tests}
+	${INVENV} ty check ${PROJECT_SRC} ${tests}
 
 .PHONY: lint
 # lint the code

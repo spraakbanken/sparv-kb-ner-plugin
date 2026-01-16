@@ -1,14 +1,16 @@
-from typing import Optional, Tuple
-from sparv_kb_ner.core import (
+from typing import Tuple
+
+import pytest
+
+from sbx_named_entities_kb_ner.huggingface_ner_pipeline import (
+    HuggingFaceNerPipeline,
+    # run_nlp_on_tokens,
     # Token,
     find_word_ending,
     # interleave_tags_and_sentence,
-    interleave_tags_and_tokens,
+    # interleave_tags_and_tokens,
     run_nlp_on_sentence,
-    # run_nlp_on_tokens,
 )
-import pytest
-
 
 SENTENCES = {
     "ikea": "Ikea ( namnet är bildat av initialerna för Ingvar Kamprad Elmtaryd Agunnaryd ) är ett multinationellt möbelföretag som grundades 1943 av Ingvar Kamprad .",  # noqa: E501
@@ -513,15 +515,20 @@ def test_find_word_ending(sentence_name: str, token_end: int, expected: int) -> 
     ],
 )
 def test_interleave_tags_and_tokens_run_nlp_on_sentence(
-    sentence_name: str, expected_tags: list[Tuple[int, str]]
+    sentence_name: str,
+    expected_tags: list[Tuple[int, str]],
+    snapshot,
 ) -> None:
     sentence = SENTENCES[sentence_name]
-    token_word = sentence.split(" ")
-    sent = list(range(len(token_word)))
-    result = interleave_tags_and_tokens(
-        run_nlp_on_sentence(sentence),
-        token_word,
-        sent,  # sentence
-    )
-    tags = [(t[0], t[1]) for t in result]
-    assert tags == expected_tags
+    # token_word = sentence.split(" ")
+    nlp = HuggingFaceNerPipeline()
+    # sent = list(range(len(token_word)))
+    actual = run_nlp_on_sentence(nlp.model_pipeline, sentence)
+    # result = interleave_tags_and_tokens(
+    #     run_nlp_on_sentence(sentence),
+    #     token_word,
+    #     sent,  # sentence
+    # )
+    # tags = [(t[0], t[1]) for t in result]
+    # assert tags == expected_tags
+    assert actual == snapshot

@@ -1,12 +1,11 @@
-from typing import Any, Callable, Iterable, Tuple
-import itertools
+from typing import Callable, Iterable, Tuple
 
-from sparv.api import annotator, get_logger, Output, Annotation
+from sparv.api import Annotation, Output, get_logger
+from transformers import AutoModelForTokenClassification, AutoTokenizer, pipeline
+from transformers.pipelines.token_classification import TokenClassificationPipeline
 
-from transformers import pipeline
-from transformers import AutoTokenizer, AutoModelForTokenClassification
-from sparv_kb_ner.ner_pipeline import NerPipeline
-
+from sbx_named_entities_kb_ner import constants
+from sbx_named_entities_kb_ner.ner_pipeline import NerPipeline
 
 logger = get_logger(__name__)
 
@@ -15,18 +14,22 @@ SENT_SEP = "\n"
 TOK_SEP = " "
 
 
-tokenizer = AutoTokenizer.from_pretrained(
-    "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
-)
-
 model = AutoModelForTokenClassification.from_pretrained(
     "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
 )
 
 
 class HuggingFaceNerPipeline(NerPipeline):
-    def __init__(self, model_pipeline) -> None:
-        self.model_pipeline = model_pipeline
+    def __init__(self) -> None:
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            constants.TOKENIZER_NAME, revision=constants.TOKENIZER_REVISION
+        )
+        self.model = AutoModelForTokenClassification.from_pretrained(
+            constants.MODEL_NAME, revision=constants.MODEL_REVISION
+        )
+        self.model_pipeline: TokenClassificationPipeline = pipeline(
+            "token-classification", model=self.model, tokenizer=self.tokenizer
+        )
 
     def run(
         self,
@@ -113,19 +116,6 @@ class HuggingFaceNerPipeline(NerPipeline):
         logger.info("writing annotations")
         out_ne_type.write(out_type_annotation)
         out_ne_score.write(out_score_annotation)
-
-
-def load_model(model: str, tokenizer: str) -> NerPipeline:
-    logger.info(
-        "preloading HuggingFaceNerPipeline(model=%s, tokenizer=%s)", model, tokenizer
-    )
-    return HuggingFaceNerPipeline(
-        model_pipeline=pipeline(
-            "ner",
-            model=model,
-            tokenizer=tokenizer,
-        )
-    )
 
 
 def run_model(
@@ -215,32 +205,32 @@ def run_model(
     out_ne_score.write(out_score_annotation)
 
 
-def tokenize_and_align_labels(examples):
-    logger.debug("type(examples)=%s", type(examples))
-    logger.debug("type(examples[0])=%s", type(examples[0]))
-    logger.debug("type(examples[0][0])=%s", type(examples[0][0]))
-    tokenized_inputs = tokenizer(examples, truncation=True, is_split_into_words=True)
+# def tokenize_and_align_labels(examples):
+#     logger.debug("type(examples)=%s", type(examples))
+#     logger.debug("type(examples[0])=%s", type(examples[0]))
+#     logger.debug("type(examples[0][0])=%s", type(examples[0][0]))
+#     tokenized_inputs = tokenizer(examples, truncation=True, is_split_into_words=True)
 
-    labels = []
-    for i, label in enumerate(examples):
-        # logger.debug("i=%d, label=%s, len(labels)=%d", i, label, len(labels))
-        word_ids = tokenized_inputs.word_ids(
-            batch_index=i
-        )  # Map tokens to their respective word.
-        previous_word_idx = None
-        label_ids = []
-        for word_idx in word_ids:  # Set the special tokens to -100.
-            # logger.debug("word_idx = %s", word_idx)
-            if word_idx is None or word_idx == previous_word_idx:
-                label_ids.append(-100)
-            else:  # Only label the first token of a given word.
-                # logger.debug("FIRST TOKEN: label[word_idx]=%s", label[word_idx])
-                label_ids.append((word_idx, label[word_idx]))
-            previous_word_idx = word_idx
-        labels.append(label_ids)
+#     labels = []
+#     for i, label in enumerate(examples):
+#         # logger.debug("i=%d, label=%s, len(labels)=%d", i, label, len(labels))
+#         word_ids = tokenized_inputs.word_ids(
+#             batch_index=i
+#         )  # Map tokens to their respective word.
+#         previous_word_idx = None
+#         label_ids = []
+#         for word_idx in word_ids:  # Set the special tokens to -100.
+#             # logger.debug("word_idx = %s", word_idx)
+#             if word_idx is None or word_idx == previous_word_idx:
+#                 label_ids.append(-100)
+#             else:  # Only label the first token of a given word.
+#                 # logger.debug("FIRST TOKEN: label[word_idx]=%s", label[word_idx])
+#                 label_ids.append((word_idx, label[word_idx]))
+#             previous_word_idx = word_idx
+#         labels.append(label_ids)
 
-    tokenized_inputs["labels"] = labels
-    return tokenized_inputs
+#     tokenized_inputs["labels"] = labels
+#     return tokenized_inputs
 
 
 # @dataclass
@@ -316,7 +306,9 @@ def amend_token_to_last(token, tokens):
 
 
 def align_tags_and_tokens(
-    tokens: list[dict], token_word: list[str], sent: list[int]  # , sentence: str
+    tokens: list[dict],
+    token_word: list[str],
+    sent: list[int],  # , sentence: str
 ) -> Iterable[Tuple[int, str, str]]:
     # ) -> Iterable[TaggedToken]:
     # logger.info("align_tags_and_tokens.tokens = %s", tokens)

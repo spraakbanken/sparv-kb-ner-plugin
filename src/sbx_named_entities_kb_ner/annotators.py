@@ -1,18 +1,16 @@
-from typing import Any, Iterable, Optional, Tuple
-import itertools
+import typing as t
 
 from sparv.api import (
+    Annotation,
     Config,
+    Output,
     SparvErrorMessage,
     annotator,
     get_logger,
-    Output,
-    Annotation,
 )
+from transformers import NerPipeline
 
-# from transformers import AutoTokenizer, AutoModelForTokenClassification
-from sparv_kb_ner import huggingface_ner_pipeline, custom_ner_pipeline
-from sparv_kb_ner.ner_pipeline import NerPipeline
+from sbx_named_entities_kb_ner.constants import PROJECT_NAME
 
 logger = get_logger(__name__)
 
@@ -21,31 +19,16 @@ SENT_SEP = "\n"
 TOK_SEP = " "
 
 
-# tokenizer = AutoTokenizer.from_pretrained(
-#     "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
-# )
-
-# model = AutoModelForTokenClassification.from_pretrained(
-#     "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
-# )
-# nlp = pipeline(
-#     "ner",
-#     model="KBLab/bert-base-swedish-cased-ner",
-#     tokenizer="KBLab/bert-base-swedish-cased-ner",
-# )
-def ner_pipeline_preloader(
-    pipeline: str, model_name: Optional[str], tokenizer_name: Optional[str]
-) -> NerPipeline:
-    if not model_name:
-        raise SparvErrorMessage("You must set 'sparv_kb_ner.model' in your config.")
-
-    if not tokenizer_name:
-        raise SparvErrorMessage("You must set 'sparv_kb_ner.tokenizer' in your config.")
+def ner_pipeline_preloader(pipeline: str) -> NerPipeline:
+    from sbx_named_entities_kb_ner.custom_ner_pipeline import CustomNerPipeline
+    from sbx_named_entities_kb_ner.huggingface_ner_pipeline import (
+        HuggingFaceNerPipeline,
+    )
 
     if pipeline == "huggingface_ner":
-        return huggingface_ner_pipeline.load_model(model_name, tokenizer_name)
+        return t.cast(NerPipeline, HuggingFaceNerPipeline())
     elif pipeline == "custom_ner":
-        return custom_ner_pipeline.load_model(model_name, tokenizer_name)
+        return t.cast(NerPipeline, CustomNerPipeline())
     else:
         raise SparvErrorMessage(f"Unknown pipeline '{pipeline}'")
 
@@ -54,41 +37,40 @@ def ner_pipeline_preloader(
     "Named entity tagging with KB-BERT-NER",
     language=["swe"],
     preloader=ner_pipeline_preloader,
-    preloader_params=["pipeline", "model_name", "tokenizer_name"],
+    preloader_params=["pipeline"],
     preloader_target="model_preloaded",
+    config=[
+        Config(f"{PROJECT_NAME}.pipeline", description="HuggingFace pipeline to use"),
+    ],
 )
-def annotate_ner(
+def annotate(
     out_ne_type: Output = Output(
-        "<token>:sparv_kb_ner.ne_type",
+        f"<token>:{PROJECT_NAME}.ne_type",
         cls="named_entity",
         description="Named entity segment types from KB-BERT-NER",
     ),
     out_ne_score: Output = Output(
-        "<token>:sparv_kb_ner.ne_score",
+        f"<token>:{PROJECT_NAME}.ne_score",
         cls="named_entity",
         description="Named entity segment types from KB-BERT-NER",
     ),
     word: Annotation = Annotation("<token:word>"),
     sentence: Annotation = Annotation("<sentence>"),
-    pipeline: str = Config("sparv_kb_ner.pipeline", default="huggingface_ner"),
-    model_name: Optional[str] = Config("sparv_kb_ner.model"),
-    tokenizer_name: Optional[str] = Config("sparv_kb_ner.tokenizer"),
-    model_preloaded: Optional[Any] = None,
+    pipeline: str = Config(f"{PROJECT_NAME}.pipeline", default="huggingface_ner"),
+    model_preloaded: t.Any | None = None,
 ):
     logger.info("huggingface_ner_pipeline")
 
-    if model_preloaded:
-        ner_pipeline = model_preloaded
+    if model_preloaded is not None:
+        ner_pipeline: NerPipeline = t.cast(NerPipeline, model_preloaded)
     else:
         logger.info(
-            "loading ner pipeline(pipeline=%s, model=%s, tokenizer=%s)",
+            "loading ner pipeline(pipeline=%s)",
             pipeline,
-            model_name,
-            tokenizer_name,
         )
-        ner_pipeline = ner_pipeline_preloader(pipeline, model_name, tokenizer_name)
+        ner_pipeline: NerPipeline = ner_pipeline_preloader(pipeline)
 
-    ner_pipeline.run(sentence, word, out_ne_type, out_ne_score)
+    ner_pipeline.run(sentence, word, out_ne_type, out_ne_score)  # type: ignore[unresolved-attribute]
 
 
 # @annotator("Named entity tagging with KB-BERT-NER", language=["swe"])
