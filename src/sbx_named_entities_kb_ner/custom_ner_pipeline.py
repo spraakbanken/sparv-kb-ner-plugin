@@ -1,14 +1,11 @@
-from typing import Iterable, Tuple
 import itertools
 
-from sparv.api import annotator, get_logger, Output, Annotation
-
-from transformers import pipeline
-from transformers import AutoTokenizer, AutoModelForTokenClassification
 import torch
+from sparv.api import Annotation, Output, get_logger
+from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-from sparv_kb_ner.ner_pipeline import NerPipeline
-
+from sbx_named_entities_kb_ner import constants
+from sbx_named_entities_kb_ner.ner_pipeline import NerPipeline
 
 logger = get_logger(__name__)
 
@@ -17,29 +14,40 @@ SENT_SEP = "\n"
 TOK_SEP = " "
 
 
-def load_model(model_name: str, tokenizer_name: str) -> NerPipeline:
-    logger.info(
-        "preloading CustomNerPipeline(model=%s, tokenizer=%s)",
-        model_name,
-        tokenizer_name,
-    )
-    tokenizer = AutoTokenizer.from_pretrained(
-        tokenizer_name
-        # "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
-    )
+# def load_model(model_name: str, tokenizer_name: str) -> NerPipeline:
+#     logger.info(
+#         "preloading CustomNerPipeline(model=%s, tokenizer=%s)",
+#         model_name,
+#         tokenizer_name,
+#     )
+#     tokenizer = AutoTokenizer.from_pretrained(
+#         tokenizer_name
+#         # "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
+#     )
 
-    model = AutoModelForTokenClassification.from_pretrained(
-        model_name,
-        # "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
-    )
-    return CustomNerPipeline(
-        model=model,
-        tokenizer=tokenizer,
-    )
+#     model = AutoModelForTokenClassification.from_pretrained(
+#         model_name,
+#         # "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
+#     )
+#     return CustomNerPipeline(
+#         model=model,
+#         tokenizer=tokenizer,
+#     )
 
 
 class CustomNerPipeline(NerPipeline):
-    def __init__(self, model, tokenizer) -> None:
+    def __init__(self) -> None:
+        tokenizer = AutoTokenizer.from_pretrained(
+            constants.TOKENIZER_NAME,
+            revision=constants.TOKENIZER_REVISION,
+            # "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
+        )
+
+        model = AutoModelForTokenClassification.from_pretrained(
+            constants.MODEL_NAME,
+            revision=constants.MODEL_REVISION,
+            # "KBLab/bert-base-swedish-lowermix-reallysimple-ner"
+        )
         self.model = model
         self.tokenizer = tokenizer
 

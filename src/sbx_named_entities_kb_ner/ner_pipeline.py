@@ -11,5 +11,4 @@ class NerPipeline(abc.ABC):
         word: Annotation,
         out_ne_type: Output,
         out_ne_score: Output,
-    ) -> None:
-        ...
+    ) -> None: ...
